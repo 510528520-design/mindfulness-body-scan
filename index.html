@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正念身体扫描 🧘</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #2d3748;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2d3748;
+        }
+
+        .subtitle {
+            color: #718096;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .duration-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .duration-btn {
+            padding: 12px 24px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .duration-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .duration-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .timer-display {
+            font-size: 96px;
+            font-weight: 300;
+            margin-bottom: 40px;
+            color: #2d3748;
+            letter-spacing: 2px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .start-btn {
+            background: #48bb78;
+            color: white;
+        }
+
+        .start-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+
+        .pause-btn {
+            background: #ed8936;
+            color: white;
+        }
+
+        .pause-btn:hover {
+            background: #dd6b20;
+            transform: translateY(-2px);
+        }
+
+        .reset-btn {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .guide-section {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            line-height: 1.8;
+            color: #4a5568;
+        }
+
+        .guide-section h3 {
+            margin-bottom: 16px;
+            color: #2d3748;
+            text-align: center;
+        }
+
+        .guide-step {
+            margin-bottom: 12px;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .guide-step::before {
+            content: "•";
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 32px 24px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .timer-display {
+                font-size: 64px;
+            }
+            
+            .control-btn {
+                padding: 14px 24px;
+                font-size: 16px;
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>正念身体扫描</h1>
+        <p class="subtitle">慢下来，感受身体的每一处</p>
+
+        <div class="duration-selector">
+            <button class="duration-btn active" data-minutes="5">5分钟</button>
+            <button class="duration-btn" data-minutes="10">10分钟</button>
+            <button class="duration-btn" data-minutes="15">15分钟</button>
+            <button class="duration-btn" data-minutes="20">20分钟</button>
+            <button class="duration-btn" data-minutes="30">30分钟</button>
+        </div>
+
+        <div class="timer-display" id="timer">05:00</div>
+
+        <div class="controls">
+            <button class="control-btn start-btn" id="startBtn">开始</button>
+            <button class="control-btn pause-btn" id="pauseBtn" style="display: none;">暂停</button>
+            <button class="control-btn reset-btn" id="resetBtn">重置</button>
+        </div>
+
+        <div class="guide-section">
+            <h3>身体扫描引导</h3>
+            <div class="guide-step">找一个安静舒适的地方坐下或躺下，闭上眼睛</div>
+            <div class="guide-step">从脚趾开始，慢慢感受每一个部位的感觉，不管是紧张还是放松</div>
+            <div class="guide-step">缓慢向上移动：脚掌 → 小腿 → 膝盖 → 大腿 → 臀部 → 腹部 → 胸部 → 背部 → 肩膀 → 手臂 → 手掌 → 脖子 → 脸部 → 头顶</div>
+            <div class="guide-step">如果注意力分散了，没关系，轻轻把它拉回来就好</div>
+            <div class="guide-step">不用评判，只是单纯的观察和感受</div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let totalSeconds = 5 * 60;
+        let isRunning = false;
+
+        const timerEl = document.getElementById('timer');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const durationBtns = document.querySelectorAll('.duration-btn');
+        const endSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimer() {
+            timerEl.textContent = formatTime(totalSeconds);
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
+            
+            timerInterval = setInterval(() => {
+                totalSeconds--;
+                updateTimer();
+                
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    endSound.play();
+                    startBtn.style.display = 'inline-block';
+                    pauseBtn.style.display = 'none';
+                    alert('时间到！身体扫描结束 ❤️');
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.style.display = 'inline-block';
+            pauseBtn.style.display = 'none';
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            const activeBtn = document.querySelector('.duration-btn.active');
+            totalSeconds = parseInt(activeBtn.dataset.minutes) * 60;
+            updateTimer();
+            startBtn.style.display = 'inline-block';
+            pauseBtn.style.display = 'none';
+        }
+
+        durationBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (isRunning) return;
+                
+                durationBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                totalSeconds = parseInt(btn.dataset.minutes) * 60;
+                updateTimer();
+            });
+        });
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+    </script>
+</body>
+</html>
