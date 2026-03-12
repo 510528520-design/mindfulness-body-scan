@@ -27,7 +27,7 @@
             border-radius: 24px;
             padding: 48px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
+            max-width: 800px;
             width: 100%;
             text-align: center;
             backdrop-filter: blur(10px);
@@ -42,7 +42,7 @@
 
         .subtitle {
             color: #718096;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             font-size: 16px;
         }
 
@@ -50,7 +50,7 @@
             display: flex;
             justify-content: center;
             gap: 12px;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             flex-wrap: wrap;
         }
 
@@ -77,19 +77,50 @@
         }
 
         .timer-display {
-            font-size: 96px;
+            font-size: 80px;
             font-weight: 300;
-            margin-bottom: 40px;
+            margin-bottom: 24px;
             color: #2d3748;
             letter-spacing: 2px;
             font-variant-numeric: tabular-nums;
+        }
+
+        .current-part {
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 32px;
+            min-height: 36px;
+        }
+
+        .body-map-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .body-svg {
+            width: 180px;
+            height: auto;
+        }
+
+        .body-part {
+            fill: #e2e8f0;
+            transition: all 0.5s ease;
+        }
+
+        .body-part.active {
+            fill: #48bb78;
+            filter: drop-shadow(0 0 8px rgba(72, 187, 120, 0.6));
         }
 
         .controls {
             display: flex;
             justify-content: center;
             gap: 16px;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             flex-wrap: wrap;
         }
 
@@ -163,7 +194,7 @@
             left: 0;
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .container {
                 padding: 32px 24px;
             }
@@ -173,13 +204,25 @@
             }
             
             .timer-display {
-                font-size: 64px;
+                font-size: 56px;
+            }
+
+            .current-part {
+                font-size: 20px;
+            }
+
+            .body-svg {
+                width: 140px;
             }
             
             .control-btn {
                 padding: 14px 24px;
                 font-size: 16px;
                 min-width: 100px;
+            }
+
+            .body-map-container {
+                gap: 20px;
             }
         }
     </style>
@@ -198,6 +241,57 @@
         </div>
 
         <div class="timer-display" id="timer">05:00</div>
+        <div class="current-part" id="currentPart">准备开始</div>
+
+        <div class="body-map-container">
+            <!-- 正面身体图 -->
+            <svg class="body-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- 头顶 -->
+                <path class="body-part" id="part-head" d="M50 10 C65 10 75 25 75 40 C75 55 65 70 50 70 C35 70 25 55 25 40 C25 25 35 10 50 10 Z" />
+                <!-- 脸部 -->
+                <path class="body-part" id="part-face" d="M50 40 C62 40 70 52 70 65 C70 78 62 90 50 90 C38 90 30 78 30 65 C30 52 38 40 50 40 Z" />
+                <!-- 脖子 -->
+                <rect class="body-part" id="part-neck" x="45" y="90" width="10" height="15" rx="2" />
+                <!-- 肩膀 -->
+                <path class="body-part" id="part-shoulder" d="M20 105 L80 105 L85 115 L15 115 Z" />
+                <!-- 胸部 -->
+                <rect class="body-part" id="part-chest" x="30" y="105" width="40" height="30" rx="5" />
+                <!-- 腹部 -->
+                <rect class="body-part" id="part-abdomen" x="32" y="135" width="36" height="35" rx="5" />
+                <!-- 臀部 -->
+                <path class="body-part" id="part-hip" d="M30 170 L70 170 L75 185 L25 185 Z" />
+                <!-- 左臂 -->
+                <path class="body-part" id="part-left-arm" d="M20 105 L10 130 L15 150 L25 130 Z" />
+                <!-- 右手掌 -->
+                <circle class="body-part" id="part-left-hand" cx="12" cy="155" r="6" />
+                <!-- 右臂 -->
+                <path class="body-part" id="part-right-arm" d="M80 105 L90 130 L85 150 L75 130 Z" />
+                <!-- 左手掌 -->
+                <circle class="body-part" id="part-right-hand" cx="88" cy="155" r="6" />
+                <!-- 左大腿 -->
+                <rect class="body-part" id="part-left-thigh" x="28" y="180" width="18" height="40" rx="5" />
+                <!-- 右大腿 -->
+                <rect class="body-part" id="part-right-thigh" x="54" y="180" width="18" height="40" rx="5" />
+                <!-- 左小腿 -->
+                <rect class="body-part" id="part-left-calf" x="30" y="220" width="14" height="35" rx="3" />
+                <!-- 右小腿 -->
+                <rect class="body-part" id="part-right-calf" x="56" y="220" width="14" height="35" rx="3" />
+                <!-- 左脚掌 -->
+                <path class="body-part" id="part-left-foot" d="M30 255 L44 255 L44 265 L30 268 Z" />
+                <!-- 右脚掌 -->
+                <path class="body-part" id="part-right-foot" d="M56 255 L70 255 L70 268 L56 265 Z" />
+                <!-- 左脚趾 -->
+                <circle class="body-part" id="part-left-toe" cx="37" cy="268" r="4" />
+                <!-- 右脚趾 -->
+                <circle class="body-part" id="part-right-toe" cx="63" cy="268" r="4" />
+            </svg>
+
+            <!-- 背面身体图 -->
+            <svg class="body-svg" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- 背部 -->
+                <rect class="body-part" id="part-back" x="30" y="105" width="40" height="65" rx="5" />
+            </svg>
+        </div>
 
         <div class="controls">
             <button class="control-btn start-btn" id="startBtn">开始</button>
@@ -208,8 +302,7 @@
         <div class="guide-section">
             <h3>身体扫描引导</h3>
             <div class="guide-step">找一个安静舒适的地方坐下或躺下，闭上眼睛</div>
-            <div class="guide-step">从脚趾开始，慢慢感受每一个部位的感觉，不管是紧张还是放松</div>
-            <div class="guide-step">缓慢向上移动：脚掌 → 小腿 → 膝盖 → 大腿 → 臀部 → 腹部 → 胸部 → 背部 → 肩膀 → 手臂 → 手掌 → 脖子 → 脸部 → 头顶</div>
+            <div class="guide-step">跟着图示的高亮部位，慢慢感受每一个部位的感觉，不管是紧张还是放松</div>
             <div class="guide-step">如果注意力分散了，没关系，轻轻把它拉回来就好</div>
             <div class="guide-step">不用评判，只是单纯的观察和感受</div>
         </div>
@@ -219,12 +312,39 @@
         let timerInterval;
         let totalSeconds = 5 * 60;
         let isRunning = false;
+        let currentPartIndex = 0;
+        let partDuration = 0;
+
+        // 扫描部位顺序
+        const scanParts = [
+            { id: 'part-left-toe', name: '左脚趾' },
+            { id: 'part-right-toe', name: '右脚趾' },
+            { id: 'part-left-foot', name: '左脚掌' },
+            { id: 'part-right-foot', name: '右脚掌' },
+            { id: 'part-left-calf', name: '左小腿' },
+            { id: 'part-right-calf', name: '右小腿' },
+            { id: 'part-left-thigh', name: '左大腿' },
+            { id: 'part-right-thigh', name: '右大腿' },
+            { id: 'part-hip', name: '臀部' },
+            { id: 'part-abdomen', name: '腹部' },
+            { id: 'part-chest', name: '胸部' },
+            { id: 'part-back', name: '背部' },
+            { id: 'part-shoulder', name: '肩膀' },
+            { id: 'part-left-arm', name: '左手臂' },
+            { id: 'part-left-hand', name: '左手掌' },
+            { id: 'part-right-arm', name: '右手臂' },
+            { id: 'part-right-hand', name: '右手掌' },
+            { id: 'part-neck', name: '脖子' },
+            { id: 'part-face', name: '脸部' },
+            { id: 'part-head', name: '头顶' }
+        ];
 
         const timerEl = document.getElementById('timer');
         const startBtn = document.getElementById('startBtn');
         const pauseBtn = document.getElementById('pauseBtn');
         const resetBtn = document.getElementById('resetBtn');
         const durationBtns = document.querySelectorAll('.duration-btn');
+        const currentPartEl = document.getElementById('currentPart');
         const endSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
         function formatTime(seconds) {
@@ -237,6 +357,21 @@
             timerEl.textContent = formatTime(totalSeconds);
         }
 
+        function updateCurrentPart() {
+            // 清除所有高亮
+            document.querySelectorAll('.body-part').forEach(p => p.classList.remove('active'));
+            
+            if (currentPartIndex < scanParts.length) {
+                const part = scanParts[currentPartIndex];
+                // 高亮当前部位
+                document.getElementById(part.id)?.classList.add('active');
+                // 更新提示文字
+                currentPartEl.textContent = `请专注于：${part.name}`;
+            } else {
+                currentPartEl.textContent = '扫描完成，休息一会儿吧';
+            }
+        }
+
         function startTimer() {
             if (isRunning) return;
             
@@ -244,9 +379,21 @@
             startBtn.style.display = 'none';
             pauseBtn.style.display = 'inline-block';
             
+            // 计算每个部位的扫描时间
+            partDuration = Math.ceil(totalSeconds / scanParts.length);
+            
             timerInterval = setInterval(() => {
                 totalSeconds--;
                 updateTimer();
+                
+                // 切换部位
+                const elapsed = (parseInt(document.querySelector('.duration-btn.active').dataset.minutes) * 60) - totalSeconds;
+                const newPartIndex = Math.floor(elapsed / partDuration);
+                
+                if (newPartIndex !== currentPartIndex && newPartIndex < scanParts.length) {
+                    currentPartIndex = newPartIndex;
+                    updateCurrentPart();
+                }
                 
                 if (totalSeconds <= 0) {
                     clearInterval(timerInterval);
@@ -254,6 +401,7 @@
                     endSound.play();
                     startBtn.style.display = 'inline-block';
                     pauseBtn.style.display = 'none';
+                    currentPartEl.textContent = '🎉 时间到！身体扫描结束';
                     alert('时间到！身体扫描结束 ❤️');
                 }
             }, 1000);
@@ -264,14 +412,18 @@
             isRunning = false;
             startBtn.style.display = 'inline-block';
             pauseBtn.style.display = 'none';
+            currentPartEl.textContent = '已暂停，点击开始继续';
         }
 
         function resetTimer() {
             clearInterval(timerInterval);
             isRunning = false;
+            currentPartIndex = 0;
             const activeBtn = document.querySelector('.duration-btn.active');
             totalSeconds = parseInt(activeBtn.dataset.minutes) * 60;
             updateTimer();
+            currentPartEl.textContent = '准备开始';
+            document.querySelectorAll('.body-part').forEach(p => p.classList.remove('active'));
             startBtn.style.display = 'inline-block';
             pauseBtn.style.display = 'none';
         }
@@ -284,6 +436,9 @@
                 btn.classList.add('active');
                 totalSeconds = parseInt(btn.dataset.minutes) * 60;
                 updateTimer();
+                currentPartIndex = 0;
+                currentPartEl.textContent = '准备开始';
+                document.querySelectorAll('.body-part').forEach(p => p.classList.remove('active'));
             });
         });
 
